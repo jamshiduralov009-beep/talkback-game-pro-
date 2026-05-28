@@ -1,1 +1,38 @@
+name: TalkBack Game Pro APK Builder
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Loyihani serverga yuklash
+      uses: actions/checkout@v4
+
+    - name: Java JDK 17 muhitini o'rnatish
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'temurin'
+        java-version: '17'
+
+    - name: Android SDK vositalarini sozlash
+      uses: android-actions/setup-android@v3
+
+    - name: Loyihaga Gradle huquqlarini berish
+      run: chmod +x gradlew
+      continue-on-error: true
+
+    - name: Kotlin loyihasini toza APK qilib yig'ish (Build)
+      run: ./gradlew assembleDebug
+      continue-on-error: true
+
+    - name: Tayyor APK faylni yuklab olish uchun saqlash
+      uses: actions/upload-artifact@v4
+      with:
+        name: TalkBack-Game-Pro-Beta-APK
+        path: app/build/outputs/apk/debug/*.apk
 
